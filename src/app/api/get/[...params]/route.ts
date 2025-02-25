@@ -7,6 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { params: 
     const apiPath = resolvedParams?.params ? `/${resolvedParams.params.join("/")}` : "";
 
     const { search } = new URL(request.url);
+
     const queryParams = search || "";
 
 
