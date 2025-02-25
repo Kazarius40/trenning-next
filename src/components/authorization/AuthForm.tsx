@@ -8,7 +8,6 @@ import {joiResolver} from "@hookform/resolvers/joi";
 import userAuthValidator from "@/validators/userAuthValidator";
 import {loginWithToken} from "@/services/auth.service";
 import Form from "next/form";
-import {setCookie} from "cookies-next";
 
 export const AuthForm = () => {
     const router = useRouter();
@@ -17,21 +16,10 @@ export const AuthForm = () => {
         resolver: joiResolver(userAuthValidator)
     });
     const loginHandler = async (formData: FormData): Promise<void> => {
-        const response = await loginWithToken(formData);
-
-        if (response) {
-            const accessToken = response.headers.get("Authorization");
-            const refreshToken = response.headers.get("Refresh-Token");
-            const userData = response.headers.get("User-Data");
-
-            if (accessToken && refreshToken && userData) {
-                setCookie('accessToken', accessToken);
-                setCookie('refreshToken', refreshToken);
-                setCookie('userData', userData);
-            }
+        await loginWithToken(formData);
 
             router.push('/');
-        }
+
     }
 
 

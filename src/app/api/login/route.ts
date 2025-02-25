@@ -15,11 +15,24 @@ export async function POST(request: Request) {
 
     const {accessToken, refreshToken, ...userData} = userWithTokens;
 
+
     const response = NextResponse.json({ success: true });
 
-    response.headers.set("Authorization", accessToken);
-    response.headers.set("Refresh-Token", refreshToken);
-    response.headers.set("User-Data", JSON.stringify(userData));
+
+    response.cookies.set("accessToken", accessToken, {
+        httpOnly: true,
+        path: "/",
+    });
+
+    response.cookies.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        path: "/",
+    });
+
+    response.cookies.set("userData", JSON.stringify(userData), {
+        path: "/",
+    });
+
 
     return response;
 }

@@ -9,7 +9,6 @@ export default function UsersPage() {
     useEffect(() => {
         (async () => {
             const response = await fetchUsersApi(`/auth/users?limit=1`);
-            console.log("response:", response);
             setUsers(response);
         })();
     }, []);
