@@ -1,11 +1,14 @@
 'use client';
-import Form from "next/form";
-import {joiResolver} from "@hookform/resolvers/joi";
-import {useForm} from "react-hook-form";
-import userAuthValidator from "@/app/validators/userAuthValidator";
-import {IAuthForm} from "@/app/models/authorization/IAuthForm";
-import {loginWithToken} from "@/app/services/auth.service";
+
+
 import {useRouter} from "next/navigation";
+import {useForm} from "react-hook-form";
+import {IAuthForm} from "@/models/authorization/IAuthForm";
+import {joiResolver} from "@hookform/resolvers/joi";
+import userAuthValidator from "@/validators/userAuthValidator";
+import {loginWithToken} from "@/services/auth.service";
+import Form from "next/form";
+import {setCookie} from "cookies-next";
 
 export const AuthForm = () => {
     const router = useRouter();
@@ -14,9 +17,23 @@ export const AuthForm = () => {
         resolver: joiResolver(userAuthValidator)
     });
     const loginHandler = async (formData: FormData): Promise<void> => {
-        await loginWithToken(formData);
-        router.push('/');
+        const response = await loginWithToken(formData);
+
+        if (response) {
+            const accessToken = response.headers.get("Authorization");
+            const refreshToken = response.headers.get("Refresh-Token");
+            const userData = response.headers.get("User-Data");
+
+            if (accessToken && refreshToken && userData) {
+                setCookie('accessToken', accessToken);
+                setCookie('refreshToken', refreshToken);
+                setCookie('userData', userData);
+            }
+
+            router.push('/');
+        }
     }
+
 
     return (
         <>
@@ -35,5 +52,5 @@ export const AuthForm = () => {
                 <button disabled={!isValid}>Увійти</button>
             </Form>
         </>
-    );
-};
+    )
+}

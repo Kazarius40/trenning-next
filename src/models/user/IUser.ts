@@ -1,8 +1,8 @@
-import {IHair} from "@/app/models/user/IHair";
-import {IAddress} from "@/app/models/user/IAddress";
-import {IBank} from "@/app/models/user/IBank";
-import {ICompany} from "@/app/models/user/ICompany";
-import {ICrypto} from "@/app/models/user/ICrypto";
+import {IHair} from "@/models/user/IHair";
+import {IAddress} from "@/models/user/IAddress";
+import {IBank} from "@/models/user/IBank";
+import {ICompany} from "@/models/user/ICompany";
+import {ICrypto} from "@/models/user/ICrypto";
 
 export interface IUser {
     id: number;

@@ -1,4 +1,4 @@
-import {ICoordinates} from "@/app/models/user/ICoordinates";
+import {ICoordinates} from "@/models/user/ICoordinates";
 
 export interface IAddress {
     address: string;

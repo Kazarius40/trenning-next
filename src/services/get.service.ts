@@ -1,7 +1,7 @@
-export async function fetchUsersApi(params: string) {
-    await fetch('http://localhost:3000/api/auth/get', {
+"use client";
+export async function fetchUsersApi(endpoint: string) {
+    const response = await fetch(`http://localhost:3000/api/get${endpoint}`, {
         method: 'GET',
-        body: params,
     });
-
+    return response.json();
 }

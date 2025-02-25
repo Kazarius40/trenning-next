@@ -1,4 +1,4 @@
-import {IRecipe} from "@/app/models/recipes/IRecipe";
+import {IRecipe} from "@/models/recipes/IRecipe";
 
 export interface IRecipes {
     recipes: IRecipe[];

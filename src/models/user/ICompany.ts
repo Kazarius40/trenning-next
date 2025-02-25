@@ -1,4 +1,4 @@
-import {IAddress} from "@/app/models/user/IAddress";
+import {IAddress} from "@/models/user/IAddress";
 
 export interface ICompany {
     department: string;

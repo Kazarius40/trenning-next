@@ -1,28 +1,28 @@
-import PaginationComponentUsers from "@/app/components/pagination/PaginationComponentUsers";
-import SearchInput from "@/app/components/search-input/SearchInput";
-import {fetchUsersApi} from "@/app/services/get.service";
+"use client";
+import {fetchUsersApi} from "@/services/get.service";
+import {useEffect, useState} from "react";
 
-interface UsersPageProps {
-    searchParams: Promise<{ [key: string]: string | undefined }>;
-}
+export default function UsersPage() {
 
-export default async function UsersPage({searchParams}: UsersPageProps) {
-    const resolvedSearchParams = (await searchParams) ?? {};
-    const page = Number(resolvedSearchParams?.page) || 1;
+    const [users, setUsers] = useState(null);
 
-    const limit = 30;
-    const skip = (page - 1) * limit;
-    let total;
-
-    const response = await fetchUsersApi(`/auth/users?limit=1`);
-    total = response.total;
+    useEffect(() => {
+        (async () => {
+            const response = await fetchUsersApi(`/auth/users?limit=1`);
+            console.log("response:", response);
+            setUsers(response);
+        })();
+    }, []);
 
 
     return (
         <>
-            <PaginationComponentUsers page={page} total={total}/>
-            <SearchInput/>
-            <UsersContainer page={page} limit={limit} skip={skip}/>
+          Content UsersPage
+            {users ? (
+                <pre>{JSON.stringify(users, null, 2)}</pre>
+            ) : (
+                <p>Loading...</p>
+            )}
         </>
     );
 }

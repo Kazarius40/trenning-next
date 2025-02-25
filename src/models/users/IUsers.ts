@@ -1,4 +1,4 @@
-import {IUser} from "@/app/models/user/IUser";
+import {IUser} from "@/models/user/IUser";
 
 export interface IUsers {
     users: IUser[],

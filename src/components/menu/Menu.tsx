@@ -7,8 +7,8 @@ const Menu = () => {
     return (
         <nav>
             <ul>
-                <li><Link href="/pages/users">Користувачі</Link></li>
-                <li><Link href="/pages/recipes">Рецепти</Link></li>
+                <li><Link href="/users">Користувачі</Link></li>
+                <li><Link href="/recipes">Рецепти</Link></li>
             </ul>
         </nav>
     );

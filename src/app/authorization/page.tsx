@@ -1,4 +1,4 @@
-import {AuthForm} from "@/app/components/authorization/AuthForm";
+import {AuthForm} from "@/components/authorization/AuthForm";
 
 const AuthorizationPage = async () => {
 
