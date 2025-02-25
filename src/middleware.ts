@@ -6,7 +6,6 @@ export function middleware(req: NextRequest) {
         const accessTokenCookie = req.cookies.get("accessToken");
         const accessToken = accessTokenCookie?.value;
 
-
         const headers = new Headers(req.headers);
 
         if (accessToken) {
