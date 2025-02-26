@@ -1,6 +1,5 @@
-export async function loginWithToken(data: FormData) {
-   await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        body: data,
-    });
+import axios from "axios";
+
+export async function loginWithToken(data: FormData): Promise<void> {
+    await axios.post('http://localhost:3000/api/login', data);
 }

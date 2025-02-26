@@ -1,21 +1,24 @@
 import {NextRequest, NextResponse} from "next/server";
 
 export function middleware(req: NextRequest) {
+    const accessTokenCookie = req.cookies.get("accessToken");
+    const accessToken = accessTokenCookie?.value;
 
-    if (req.method === "GET") {
-        const accessTokenCookie = req.cookies.get("accessToken");
-        const accessToken = accessTokenCookie?.value;
+    if (req.method === "GET" && accessToken) {
+        const headers = new Headers(req.headers);
+        headers.set('Authorization', `Bearer ${accessToken}`);
+        return NextResponse.next({request: {headers}});
+
+    }
+    if (req.method === "POST" && accessToken) {
+        const refreshTokenCookie = req.cookies.get("refreshToken");
+        const refreshToken = refreshTokenCookie?.value;
 
         const headers = new Headers(req.headers);
-
-        if (accessToken) {
-            headers.set('Authorization', `Bearer ${accessToken}`);
-        }
-
-        return NextResponse.next({
-            request: {headers}
-        });
+        headers.set('Authorization', `Bearer ${refreshToken}`);
+        return NextResponse.next({request: {headers}});
     }
+
     return NextResponse.next();
 }
 

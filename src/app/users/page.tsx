@@ -1,27 +1,23 @@
 "use client";
-import {fetchUsersApi} from "@/services/get.service";
+import PaginationComponentUsers from "@/components/pagination/PaginationComponentUsers";
 import {useEffect, useState} from "react";
 
-export default function UsersPage() {
+interface UsersPageProps {
+    searchParams: Promise<{ [key: string]: string | undefined }>;
+}
 
-    const [users, setUsers] = useState(null);
+export default function UsersPage({searchParams}: UsersPageProps) {
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        (async () => {
-            const response = await fetchUsersApi(`/auth/users?limit=1`);
-            setUsers(response);
-        })();
-    }, []);
-
+        searchParams.then((resolvedSearchParams) => {
+            setPage(Number(resolvedSearchParams?.page) || 1);
+        });
+    }, [searchParams]);
 
     return (
         <>
-          Content UsersPage
-            {users ? (
-                <pre>{JSON.stringify(users, null, 2)}</pre>
-            ) : (
-                <p>Loading...</p>
-            )}
+            <PaginationComponentUsers page={page}/>
         </>
     );
 }
