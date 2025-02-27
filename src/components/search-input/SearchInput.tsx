@@ -15,9 +15,7 @@ const SearchInput = () => {
         const newUrl = pathname.startsWith("/recipes")
             ? `/recipes?q=${newValue}`
             : `/users?q=${newValue}`;
-
         router.push(newUrl);
-        // router.refresh();
     };
 
     useEffect(() => {

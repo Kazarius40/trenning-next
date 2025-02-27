@@ -16,10 +16,12 @@ const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip}) => {
     const searchParams = useSearchParams();
     const query = searchParams.get("q") || "";
 
+
     useEffect(() => {
         const fetchUsers = async () => {
             const baseEndpoint = `/auth/users?limit=${limit}&skip=${skip}`;
-            const finalEndpoint = query ? `/search?q=${query}&${baseEndpoint}` : baseEndpoint;
+            const finalEndpoint = query ? `/auth/users/search?q=${query}` : baseEndpoint;
+            console.log("finalEndpoint: ", finalEndpoint);
 
             setUsers((await fetchUsersApi(finalEndpoint)).users);
         };
