@@ -1,5 +1,6 @@
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {NextRequest, NextResponse} from "next/server";
+import axiosInstance from "@/services/axios.instance";
 
 interface RequestParams {
     params: { params: string[] };
@@ -12,12 +13,11 @@ export async function GET(request: NextRequest, {params}: RequestParams) {
     const {search} = new URL(request.url);
     const queryParams = search || "";
 
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "";
-    const apiUrl = `${baseUrl}${apiPath}${queryParams}`;
-
+    const apiUrl = `${apiPath}${queryParams}`;
     const Authorization = request.headers.get("Authorization");
+
     try {
-        const {data} = await axios.get(apiUrl, {headers: {Authorization}});
+        const {data} = await axiosInstance.get(apiUrl, {headers: {Authorization}});
 
         return NextResponse.json(data);
     } catch (error) {
