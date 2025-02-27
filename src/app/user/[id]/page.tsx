@@ -7,6 +7,7 @@ import {IRecipes} from "@/models/recipes/IRecipes";
 import {fetchUsersApi} from "@/services/api.service";
 import {useParams} from "next/navigation";
 import Link from "next/link";
+import {IUsers} from "@/models/users/IUsers";
 
 export default function UserProfile() {
     const {id} = useParams();
@@ -16,11 +17,11 @@ export default function UserProfile() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            let dataUser;
-            dataUser = await fetchUsersApi("/auth/users/" + id);
 
-            const {total} = await fetchUsersApi("/auth/users?limit=1") as IRecipes;
-            const recipesResponse = await fetchRecipesApi("/auth/recipes?limit=" + total) as IRecipes;
+            const dataUser = await fetchUsersApi("/auth/users/" + id);
+
+            const {total} = await fetchUsersApi("/auth/users?limit=1") as IUsers;
+            const recipesResponse = await fetchUsersApi("/auth/recipes?limit=" + total) as IRecipes;
             const userRecipes = recipesResponse.recipes.filter(recipe => recipe.userId === Number(id));
             setRecipes(userRecipes);
 
@@ -49,7 +50,7 @@ export default function UserProfile() {
                     <ul>
                         {recipes.map(recipe => (
                             <li key={recipe.id}>
-                                <Link href={'/pages/recipe/' + recipe.id}>{recipe.name}</Link>
+                                <Link href={'/recipe/' + recipe.id}>{recipe.name}</Link>
                             </li>
                         ))}
                     </ul>
