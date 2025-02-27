@@ -8,6 +8,11 @@ interface IUsersProps {
 }
 
 export default function UsersComponent({users, user}: IUsersProps) {
+
+    if (!user && users.length === 0) {
+        return <p>Завантаження...</p>;
+    }
+
     return(
         <div>
             <h1>Список користувачів</h1>
