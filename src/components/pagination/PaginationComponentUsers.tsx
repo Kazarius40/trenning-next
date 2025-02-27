@@ -1,6 +1,7 @@
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {fetchUsersApi} from "@/services/api.service";
+import {useRouter} from "next/navigation";
 
 interface PaginationProps {
     page: number
@@ -9,13 +10,23 @@ interface PaginationProps {
 export default function PaginationComponentUsers({page}: PaginationProps) {
 
     const [total, setTotal] = useState<number>(0);
+    const router = useRouter();
+
+    const redirectToHome = useCallback(() => {
+        router.push("/");
+    }, [router]);
 
     useEffect(() => {
         (async () => {
-            const {total} = await fetchUsersApi(`/auth/users?limit=1`);
-            setTotal(total);
+            try {
+                const {total} = await fetchUsersApi(`/auth/users?limit=1`);
+                setTotal(total);
+            } catch (error) {
+                console.error(error);
+                redirectToHome();
+            }
         })();
-    }, []);
+    }, [redirectToHome]);
 
 
     const limit = 30;

@@ -8,17 +8,7 @@ export function middleware(req: NextRequest) {
         const headers = new Headers(req.headers);
         headers.set('Authorization', `Bearer ${accessToken}`);
         return NextResponse.next({request: {headers}});
-
     }
-    if (req.method === "POST" && accessToken) {
-        const refreshTokenCookie = req.cookies.get("refreshToken");
-        const refreshToken = refreshTokenCookie?.value;
-
-        const headers = new Headers(req.headers);
-        headers.set('Authorization', `Bearer ${refreshToken}`);
-        return NextResponse.next({request: {headers}});
-    }
-
     return NextResponse.next();
 }
 
