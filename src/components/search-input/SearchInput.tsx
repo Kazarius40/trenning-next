@@ -13,7 +13,7 @@ const SearchInput = () => {
 
         setCookie('searchEndpoint', newEndpoint);
         setSearch(newValue);
-        const targetPage = pathname.startsWith('/pages/recipes') ? '/pages/recipes' : '/pages/users';
+        const targetPage = pathname.startsWith('/recipes') ? '/recipes' : '/users';
         router.push(targetPage);
     };
 
