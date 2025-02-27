@@ -4,6 +4,7 @@ import {IUser} from "@/models/user/IUser";
 import {fetchUsersApi} from "@/services/api.service";
 import UsersComponent from "@/components/users/users-component/UsersComponent";
 import {useSearchParams} from "next/navigation";
+import {IUsers} from "@/models/users/IUsers";
 
 interface UsersContainerProps {
     page: number;
@@ -27,12 +28,12 @@ const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip}) => {
                 : query
                     ? `/auth/users/search?q=${query}` : baseEndpoint;
 
-            const response = await fetchUsersApi(finalEndpoint);
-
             if (isNumericQuery) {
+                const response = await fetchUsersApi<IUser>(finalEndpoint);
                 setUser(response);
                 setUsers([]);
             } else {
+                const response = await fetchUsersApi<IUsers>(finalEndpoint);
                 setUser(null);
                 setUsers(response.users);
             }

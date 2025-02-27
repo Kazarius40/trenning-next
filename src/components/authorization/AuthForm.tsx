@@ -1,6 +1,5 @@
 'use client';
 
-
 import {useRouter} from "next/navigation";
 import {useForm} from "react-hook-form";
 import {IAuthForm} from "@/models/authorization/IAuthForm";
@@ -17,9 +16,7 @@ export const AuthForm = () => {
     });
     const loginHandler = async (formData: FormData): Promise<void> => {
         await loginWithToken(formData);
-
-            router.push('/');
-
+        router.push('/');
     }
 
 

@@ -18,10 +18,10 @@ export default function UserProfile() {
     useEffect(() => {
         const fetchUser = async () => {
 
-            const dataUser = await fetchUsersApi("/auth/users/" + id);
+            const dataUser = await fetchUsersApi<IUser>("/auth/users/" + id);
 
-            const {total} = await fetchUsersApi("/auth/users?limit=1") as IUsers;
-            const recipesResponse = await fetchUsersApi("/auth/recipes?limit=" + total) as IRecipes;
+            const {total} = await fetchUsersApi<IUsers>("/auth/users?limit=1");
+            const recipesResponse = await fetchUsersApi<IRecipes>("/auth/recipes?limit=" + total);
             const userRecipes = recipesResponse.recipes.filter(recipe => recipe.userId === Number(id));
             setRecipes(userRecipes);
 
@@ -50,7 +50,7 @@ export default function UserProfile() {
                     <ul>
                         {recipes.map(recipe => (
                             <li key={recipe.id}>
-                                <Link href={'/recipe/' + recipe.id}>{recipe.name}</Link>
+                                <Link href={'/recipe'}>{recipe.name}</Link>
                             </li>
                         ))}
                     </ul>
