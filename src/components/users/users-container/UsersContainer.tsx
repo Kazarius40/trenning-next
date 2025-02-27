@@ -13,22 +13,34 @@ interface UsersContainerProps {
 
 const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip}) => {
     const [users, setUsers] = useState<IUser[]>([]);
+    const [user, setUser] = useState<IUser | null>(null);
     const searchParams = useSearchParams();
     const query = searchParams.get("q") || "";
-
+    const isNumericQuery = !isNaN(Number(query)) && query.trim() !== "";
 
     useEffect(() => {
         const fetchUsers = async () => {
             const baseEndpoint = `/auth/users?limit=${limit}&skip=${skip}`;
-            const finalEndpoint = query ? `/auth/users/search?q=${query}` : baseEndpoint;
-            console.log("finalEndpoint: ", finalEndpoint);
 
-            setUsers((await fetchUsersApi(finalEndpoint)).users);
+            const finalEndpoint = isNumericQuery
+                ? `/auth/users/${Number(query)}`
+                : query
+                    ? `/auth/users/search?q=${query}` : baseEndpoint;
+
+            const response = await fetchUsersApi(finalEndpoint);
+
+            if (isNumericQuery) {
+                setUser(response);
+                setUsers([]);
+            } else {
+                setUser(null);
+                setUsers(response.users);
+            }
         };
         fetchUsers().catch(console.error);
-    }, [query, page, limit, skip]);
+    }, [query, isNumericQuery, page, limit, skip]);
 
-    return <UsersComponent users={users}/>;
+    return <UsersComponent user={user} users={users}/>;
 };
 
 export default UsersContainer;
