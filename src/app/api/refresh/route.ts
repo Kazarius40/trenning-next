@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
+import {setTokensInCookies} from "@/utils/cookies.utils";
 
 export async function POST(request: NextRequest) {
 
@@ -7,26 +8,15 @@ export async function POST(request: NextRequest) {
 
     const refreshToken = request.cookies.get("refreshToken")?.value;
 
-
     const {data: userWithTokens} = await axios.post(`${baseUrl}/auth/refresh`, {
         refreshToken,
         expiresInMins: 1,
     });
 
     const {accessToken, refreshToken: newRefreshToken} = userWithTokens;
-
-    const response = NextResponse.json({success: true});
-
+    const response = NextResponse.json({});
     if (accessToken && newRefreshToken) {
-        response.cookies.set("accessToken", accessToken, {
-            httpOnly: true,
-            path: "/",
-        });
-
-        response.cookies.set("refreshToken", newRefreshToken, {
-            httpOnly: true,
-            path: "/",
-        });
+        return setTokensInCookies(response, accessToken, newRefreshToken);
     }
     return response;
 }

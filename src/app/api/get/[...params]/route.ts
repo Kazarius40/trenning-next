@@ -24,10 +24,7 @@ export async function GET(request: NextRequest, {params}: RequestParams) {
         const axiosError = error as AxiosError;
         const status = axiosError.response?.status || 500;
 
-        return NextResponse.json(
-            {},
-            {status}
-        );
+        return NextResponse.json({}, {status});
     }
 
 }

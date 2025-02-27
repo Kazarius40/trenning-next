@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import axiosInstance from "@/services/axios.instance";
 import {IUserWithToken} from "@/models/user-with-token/IUserWithToken";
+import {setTokensInCookies} from "@/utils/cookies.utils";
 
 export async function POST(request: Request) {
 
@@ -15,24 +16,9 @@ export async function POST(request: Request) {
     });
 
     const {accessToken, refreshToken, ...userData} = userWithTokens;
-
-
-    const response = NextResponse.json({success: true});
-
+    const response = NextResponse.json({});
     if (accessToken && refreshToken && userData) {
-        response.cookies.set("accessToken", accessToken, {
-            httpOnly: true,
-            path: "/",
-        });
-
-        response.cookies.set("refreshToken", refreshToken, {
-            httpOnly: true,
-            path: "/",
-        });
-
-        response.cookies.set("userData", JSON.stringify(userData), {
-            path: "/",
-        });
+        return setTokensInCookies(response, accessToken, refreshToken, userData);
     }
     return response;
 }
