@@ -3,25 +3,19 @@ import {NextRequest, NextResponse} from "next/server";
 import axiosInstance from "@/services/axios.instance";
 import {ApiResponse} from "@/models/api-response/ApiResponse";
 
-interface RequestParams {
-    params: { params: string[] };
-}
-
 export async function GET(
-    request: NextRequest,
-    {params}: RequestParams
+    request: NextRequest
 ): Promise<NextResponse<ApiResponse | null>> {
 
-    const resolvedParams = await (async () => params)();
-    const apiPath = resolvedParams?.params ? `/${resolvedParams.params.join("/")}` : "";
-    const {search} = new URL(request.url);
-    const queryParams = search || "";
+    const url = new URL(request.url);
+    const apiPath = url.pathname.replace(/^\/api\/get/, "");
 
-    const apiUrl = `${apiPath}${queryParams}`;
+    const queryParams = url.search || "";
+
     const Authorization = request.headers.get("Authorization");
 
     try {
-        const {data} = await axiosInstance.get<ApiResponse>(apiUrl, {headers: {Authorization}});
+        const {data} = await axiosInstance.get<ApiResponse>(`${apiPath}${queryParams}`, {headers: {Authorization}});
 
         return NextResponse.json(data);
     } catch (error) {
