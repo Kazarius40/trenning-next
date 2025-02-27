@@ -6,7 +6,9 @@ export async function fetchUsersApi(endpoint: string) {
         return data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 401) {
-            await axios.get(`http://localhost:3000/api/refresh`);
+
+
+            await axios.post(`http://localhost:3000/api/refresh`);
             return fetchUsersApi(endpoint);
         }
     }

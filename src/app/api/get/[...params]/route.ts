@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {NextRequest, NextResponse} from "next/server";
 
 interface RequestParams {
@@ -18,16 +18,26 @@ export async function GET(request: NextRequest, {params}: RequestParams) {
     const apiUrl = `${baseUrl}${apiPath}${queryParams}`;
 
     const Authorization = request.headers.get("Authorization");
+    try {
+        const response = await axios.get(apiUrl, {
+            headers: {
+                Authorization,
+            },
+        });
+        const users = response.data;
+        const total = users.total;
 
-    const response = await axios.get(apiUrl, {
-        headers: {
-            Authorization,
-        },
-    });
-    const users = response.data;
-    const total = users.total;
-    if(Error){
-        console.log(Error);
+        return NextResponse.json({users, total});
+    } catch (error) {
+        const axiosError = error as AxiosError;
+
+        const status = axiosError.response?.status || 500;
+        const message = axiosError.response?.data || "Authentication failed";
+
+        return NextResponse.json(
+            { error: message },
+            { status }
+        );
     }
-    return NextResponse.json({users, total});
+
 }
