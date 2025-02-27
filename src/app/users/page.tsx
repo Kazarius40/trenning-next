@@ -1,24 +1,16 @@
 "use client";
 import PaginationComponentUsers from "@/components/pagination/PaginationComponentUsers";
-import {useEffect, useState} from "react";
 import SearchInput from "@/components/search-input/SearchInput";
 import UsersContainer from "@/components/users/users-container/UsersContainer";
+import {useSearchParams} from "next/navigation";
 
-interface UsersPageProps {
-    searchParams: Promise<{ [key: string]: string | undefined }>;
-}
-
-export default function UsersPage({searchParams}: UsersPageProps) {
-    const [page, setPage] = useState(1);
+export default function UsersPage() {
+    const searchParams = useSearchParams();
+    const pageParam = searchParams.get("page") || "1";
+    const page = Number(pageParam);
 
     const limit = 30;
     const skip = (page - 1) * limit;
-
-    useEffect(() => {
-        searchParams.then((resolvedSearchParams) => {
-            setPage(Number(resolvedSearchParams?.page) || 1);
-        });
-    }, [searchParams]);
 
     return (
         <>

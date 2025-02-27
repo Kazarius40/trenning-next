@@ -1,4 +1,4 @@
-
+'use client';
 import Link from "next/link";
 import {IUser} from "@/models/user/IUser";
 

@@ -1,26 +1,28 @@
+'use client';
 import React, {useEffect, useState} from "react";
-import {usePathname, useRouter} from "next/navigation";
-import {deleteCookie, setCookie} from "cookies-next";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 const SearchInput = () => {
     const [search, setSearch] = useState("");
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
-        const newEndpoint = `/search?q=${newValue}`;
-
-        setCookie('searchEndpoint', newEndpoint);
         setSearch(newValue);
-        const targetPage = pathname.startsWith('/recipes') ? '/recipes' : '/users';
-        router.push(targetPage);
+
+        const newUrl = pathname.startsWith("/recipes")
+            ? `/recipes?q=${newValue}`
+            : `/users?q=${newValue}`;
+
+        router.push(newUrl);
+        // router.refresh();
     };
 
     useEffect(() => {
-        deleteCookie("searchEndpoint");
-        setSearch("");
-    }, [pathname]);
+        setSearch(searchParams.get("q") || "");
+    }, [searchParams]);
 
     return (
         <>
