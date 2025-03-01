@@ -10,9 +10,10 @@ interface UsersContainerProps {
     page: number;
     limit: number;
     skip: number;
+    setTotal: (total: number) => void;
 }
 
-const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip}) => {
+const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip, setTotal}) => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [user, setUser] = useState<IUser | null>(null);
     const searchParams = useSearchParams();
@@ -32,14 +33,16 @@ const UsersContainer: FC<UsersContainerProps> = ({page, limit, skip}) => {
                 const response = await fetchUsersApi<IUser>(finalEndpoint);
                 setUser(response);
                 setUsers([]);
+                setTotal(1)
             } else {
                 const response = await fetchUsersApi<IUsers>(finalEndpoint);
                 setUser(null);
                 setUsers(response.users);
+                setTotal(response.total);
             }
         };
         fetchUsers().catch(console.error);
-    }, [query, isNumericQuery, page, limit, skip]);
+    }, [query, isNumericQuery, page, limit, skip, setTotal]);
 
     return <UsersComponent user={user} users={users}/>;
 };
